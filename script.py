@@ -8,6 +8,7 @@ Please note that this was done on Python version 3.10.12. If it does not work fo
 """
 from collections import deque
 
+
 class State:
     def __init__(self, boardState, parentState, move, depth, cost):
         self.boardState = boardState
@@ -31,9 +32,20 @@ class State:
 class EightPuzzle:
     FINAL_BOARD_STATE = [ 
         ["1", "2", "3"], 
-        ["8", "X", "4"], 
+        ["8", "X"v, "4"], 
         ["7", "6", "5"] 
     ]
+    FINAL_BOARD_STATE_DICT = { # Keep track of all the positions of the final numbers that we want
+        "1": (0, 0),
+        "2": (0, 1),
+        "3": (0, 2),
+        "8": (1, 0),
+        "X": (1, 1),
+        "4": (1, 2),
+        "7": (2, 0),
+        "6": (2, 1),
+        "5": (2, 2)
+    }
     MOVES = {
         "UP": (-1, 0),
         "DOWN": (1, 0),
@@ -60,6 +72,7 @@ class EightPuzzle:
                         else: 
                             board[i].append(number)
                             setOfNumsInBoard.add(number)
+                
                 print(f"Your board looks like this:\n{str(board[0])}\n{str(board[1])}\n{str(board[2])}")
                 break
             except ValueError:
@@ -70,9 +83,18 @@ class EightPuzzle:
     def checkValidMove():
         pass
 
+
     @staticmethod
-    def heuristicOfState():
-        pass
+    def heuristicOfState(state: State) -> int:
+        distance = 0
+        for row in range(3):
+            for col in range(3):
+                if state.boardState[row][col] != "X":
+                     current_number = state.boardState[row][col]
+                     distance += (abs(row - EightPuzzle.FINAL_BOARD_STATE_DICT[current_number][0]) + abs(col - EightPuzzle.FINAL_BOARD_STATE_DICT[current_number][1]))
+                else:
+                    continue
+        return distance
 
     @staticmethod
     def eightPuzzleSolver() -> None:
@@ -89,7 +111,8 @@ class EightPuzzle:
             print("The board is already in the final state. No moves needed.")
             return
         
-        while True:
+        # Test heuristic
+        print(EightPuzzle.heuristicOfState(State(board, None, None, 0, 0)))
 
 
 if __name__ == "__main__":
