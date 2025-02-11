@@ -69,6 +69,8 @@ class EightPuzzle:
                         else: 
                             board[i].append(number)
                             setOfNumsInBoard.add(number)
+                    if len(setOfNumsInBoard) == 9:
+                        break
                 break
             except ValueError:
                 print("Please enter a valid input. Ensure that you did not repeat yourself, that the numbers are all between 1-8, and that the empty space is noted as 'X'.")
@@ -141,14 +143,14 @@ class EightPuzzle:
 
         while frontier:
             currState = heapq.heappop(frontier)
-            print(f"Current depth: {currState.depth}\nCurrent cost: {currState.cost}\nCurrent board state:")
+            print("-----------------------------------------------")
             currState.printBoard()
+            print(f"Depth: {currState.depth}")
             if currState.isGoalState():
                 print("Goal state reached")
                 return True
             else:
                 possibleNextMoves = EightPuzzle.generatePossibleMoves(currState)
-                print(f"Seen states: {seen}")
                 # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
                 for newState in possibleNextMoves:
                     if str(newState.boardState) not in seen:
